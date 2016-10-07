@@ -276,7 +276,11 @@ Packet *PacketTunnelPktSetup(ThreadVars *tv, DecodeThreadVars *dtv, Packet *pare
     }
 
     /* copy packet and set lenght, proto */
-    PacketCopyData(p, pkt, len);
+    if (DECODE_TUNNEL_ERSPAN == proto) {
+        PacketCopyData(p, pkt + sizeof(ErspanHdr), len - sizeof(ErspanHdr));
+    } else {
+        PacketCopyData(p, pkt, len);
+    }
     p->recursion_level = parent->recursion_level + 1;
     p->ts.tv_sec = parent->ts.tv_sec;
     p->ts.tv_usec = parent->ts.tv_usec;
@@ -292,8 +296,8 @@ Packet *PacketTunnelPktSetup(ThreadVars *tv, DecodeThreadVars *dtv, Packet *pare
     /* tell new packet it's part of a tunnel */
     SET_TUNNEL_PKT(p);
 
-    ret = DecodeTunnel(tv, dtv, p, GET_PKT_DATA(p),
-                       GET_PKT_LEN(p), pq, proto);
+    ret = DecodeTunnel(tv, dtv, p, pkt,
+                       len, pq, proto);
 
     if (unlikely(ret != TM_ECODE_OK)) {
         /* Not a tunnel packet, just a pseudo packet */
