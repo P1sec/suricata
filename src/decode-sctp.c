@@ -51,8 +51,8 @@ static int DecodeSCTPPacket(ThreadVars *tv, Packet *p, uint8_t *pkt, uint16_t le
     SET_SCTP_SRC_PORT(p,&p->sp);
     SET_SCTP_DST_PORT(p,&p->dp);
 
-    p->payload = pkt + sizeof(SCTPHdr);
-    p->payload_len = len - sizeof(SCTPHdr);
+    p->payload = pkt;
+    p->payload_len = len;
 
     p->proto = IPPROTO_SCTP;
 
