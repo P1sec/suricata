@@ -101,6 +101,8 @@ void SCDropMainThreadCaps(uint32_t userid, uint32_t groupid)
         exit(EXIT_FAILURE);
     }
 
+    prctl(PR_SET_DUMPABLE, 1, 0, 0, 0);
+
     SCLogInfo("dropped the caps for main thread");
 }
 
