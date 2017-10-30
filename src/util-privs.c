@@ -93,7 +93,7 @@ void SCDropMainThreadCaps(uint32_t userid, uint32_t groupid)
             break;
     }
 
-    if (capng_change_id(userid, groupid, CAPNG_DROP_SUPP_GRP |
+    if (capng_change_id(userid, groupid,
             CAPNG_CLEAR_BOUNDING) < 0)
     {
         SCLogError(SC_ERR_CHANGING_CAPS_FAILED, "capng_change_id for main thread"
